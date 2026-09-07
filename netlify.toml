@@ -1,0 +1,11 @@
+[build]
+  command = "ng build"
+  publish = "dist/habits-and-focus/browser"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
