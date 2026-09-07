@@ -1,0 +1,40 @@
+<div class="time-picker">
+  <div class="time-picker__headers">
+    <div class="time-picker__header">Часы</div>
+    <div class="time-picker__header">Минуты</div>
+  </div>
+
+  <div class="time-picker__body">
+    <div class="time-picker__highlight"></div>
+
+    <div class="time-picker__columns">
+      <div class="time-picker__column" #hoursColumn (scroll)="onHoursScroll($event)">
+        @for (hour of hours; track hour) {
+          <button
+            type="button"
+            class="time-picker__row"
+            [class.time-picker__row--selected]="hour === selectedHour()"
+            (click)="selectHour(hour)"
+          >
+            {{ pad(hour) }}
+          </button>
+        }
+      </div>
+
+      <div class="time-picker__divider"></div>
+
+      <div class="time-picker__column" #minutesColumn (scroll)="onMinutesScroll($event)">
+        @for (minute of minutes; track minute) {
+          <button
+            type="button"
+            class="time-picker__row"
+            [class.time-picker__row--selected]="minute === selectedMinute()"
+            (click)="selectMinute(minute)"
+          >
+            {{ pad(minute) }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

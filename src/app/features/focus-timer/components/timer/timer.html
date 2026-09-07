@@ -1,0 +1,144 @@
+<section class="timer">
+  <button
+    type="button"
+    class="sound-toggle"
+    (click)="sound.toggleEnabled()"
+    [attr.aria-label]="sound.enabled() ? 'Выключить звук' : 'Включить звук'"
+  >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 8a6 6 0 0 1 12 0c0 3.5 1 5 2 6H4c1-1 2-2.5 2-6Z"/>
+      <path d="M10 19a2 2 0 0 0 4 0"/>
+      @if (!sound.enabled()) {
+        <path d="M3 3l18 18"/>
+      }
+    </svg>
+  </button>
+
+  @if (toastVisible() && toastSession()) {
+    <div class="toast">
+      <div class="toast__icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 5 5L20 7"/></svg>
+      </div>
+      <div class="toast__body">
+        <div class="toast__title">Сессия завершена!</div>
+        <div class="toast__subtitle">{{ toastSubtitle(toastSession()!) }}</div>
+      </div>
+      <button type="button" class="toast__close" (click)="dismissToast()" aria-label="Закрыть уведомление">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+  }
+
+  <div class="mode-switch">
+    <button
+      type="button"
+      class="mode-switch__tab"
+      [class.mode-switch__tab--active]="timer.mode() === 'focus'"
+      (click)="timer.setMode('focus')"
+    >
+      Фокус
+    </button>
+    <button
+      type="button"
+      class="mode-switch__tab"
+      [class.mode-switch__tab--active]="timer.mode() === 'break'"
+      (click)="timer.setMode('break')"
+    >
+      Перерыв
+    </button>
+  </div>
+
+  <div class="duration-picker">
+    <div class="duration-picker__label">Длительность</div>
+    <div class="duration-picker__options">
+      @for (minutes of durationOptions(); track minutes) {
+        <button
+          type="button"
+          class="duration-pill"
+          [class.duration-pill--active]="timer.totalSeconds() === minutes * 60"
+          [class.duration-pill--sage]="timer.mode() === 'break'"
+          [disabled]="timer.isRunning()"
+          (click)="timer.setDuration(minutes)"
+        >
+          {{ minutes }} мин
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="ring">
+    <svg width="280" height="280" viewBox="0 0 280 280" class="ring__svg">
+      <circle cx="140" cy="140" r="122" fill="none" stroke="var(--border)" stroke-width="16" />
+      <circle
+        cx="140"
+        cy="140"
+        r="122"
+        fill="none"
+        [attr.stroke]="timer.mode() === 'break' ? 'var(--sage)' : 'var(--coral)'"
+        stroke-width="16"
+        stroke-linecap="round"
+        [attr.stroke-dasharray]="circumference"
+        [attr.stroke-dashoffset]="dashOffset()"
+      />
+    </svg>
+    <div class="ring__content">
+      <div class="ring__time">{{ formattedTime() }}</div>
+      <div class="ring__caption">
+        {{ timer.mode() === 'focus' ? 'до конца сессии' : 'до конца перерыва' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button type="button" class="control-button control-button--secondary" (click)="timer.reset()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+      Сброс
+    </button>
+    <button type="button" class="control-button control-button--primary" (click)="toggleRunning()">
+      @if (timer.isRunning()) {
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><rect x="5" y="4" width="5" height="16" rx="1.2"/><rect x="14" y="4" width="5" height="16" rx="1.2"/></svg>
+        Пауза
+      } @else {
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M7 5.5v13l11-6.5-11-6.5Z"/></svg>
+        Старт
+      }
+    </button>
+  </div>
+
+  <div class="sessions">
+    <div class="sessions__label">Сессий сегодня</div>
+    <div class="sessions__dots">
+      @for (completed of sessionDots(); track $index) {
+        <div class="sessions__dot" [class.sessions__dot--filled]="completed"></div>
+      }
+    </div>
+  </div>
+
+  <app-dropdown-select
+    class="habit-picker"
+    [options]="habitOptions()"
+    [value]="timer.selectedHabitId()"
+    placeholder="Без привычки"
+    (valueChange)="onSelectHabit($event)"
+  >
+    <span leading class="habit-picker__icon">
+      @switch (selectedHabit()?.category) {
+        @case ('reading') {
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11a1 1 0 0 1 1 1v15a1 1 0 0 0-1-1H5.5A1.5 1.5 0 0 1 4 17.5V5.5Z"/><path d="M20 5.5c0-.83-.67-1.5-1.5-1.5H13a1 1 0 0 0-1 1v15a1 1 0 0 1 1-1h5.5a1.5 1.5 0 0 0 1.5-1.5V5.5Z"/></svg>
+        }
+        @case ('knitting') {
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="6"/><path d="M8 10.5c2 1 6 1 8 0M7.5 13.5c2.5 1.5 6.5 1.5 9 0M8.5 16.5c1.5 .8 5.5 .8 7 0"/><path d="M9 8 6 3M15 8l3-5"/></svg>
+        }
+        @case ('study') {
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8l10-4 10 4-10 4-10-4Z"/><path d="M6 10.5v4.5c0 1.2 2.7 3 6 3s6-1.8 6-3v-4.5"/><path d="M22 8v6"/></svg>
+        }
+        @case ('custom') {
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg>
+        }
+        @default {
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+        }
+      }
+    </span>
+  </app-dropdown-select>
+</section>

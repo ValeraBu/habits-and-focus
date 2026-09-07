@@ -1,0 +1,110 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.page__greeting {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.page__date {
+  margin-top: 4px;
+  color: var(--text-soft);
+  font-size: 14.5px;
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 20px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--coral);
+  color: white;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 26px;
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.summary-card__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-card__title {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  background: var(--border);
+  border-radius: var(--radius-round);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--coral);
+  border-radius: var(--radius-round);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .progress-fill {
+    transition: width 300ms ease-out;
+  }
+}
+
+.summary-card__percent {
+  color: var(--coral-dark);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.habit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty-state {
+  padding: 40px 26px;
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.empty-state__title {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.empty-state__text {
+  margin: 8px 0 0;
+  color: var(--text-soft);
+}

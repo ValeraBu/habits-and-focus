@@ -1,0 +1,24 @@
+@use 'styles/variables';
+@use 'styles/themes';
+
+// Every design-reference mockup assumes this reset (`* { box-sizing: border-box; }`);
+// without it, elements that combine a fixed width/height with padding render
+// larger than intended — sometimes just visually, but for scroll containers
+// (fixed height + padding + overflow, e.g. the time-picker columns) it breaks
+// the scroll range outright, since padding then adds on top of the declared
+// height instead of being included in it.
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}

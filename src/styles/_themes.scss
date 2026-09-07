@@ -1,0 +1,59 @@
+// Values below are copied verbatim from the "Тёмная тема" section of
+// .cursor/rules/project.mdc — keep this mixin in sync with that file.
+@mixin dark-palette {
+  --bg: oklch(21% 0.02 50);
+  --bg-panel: oklch(17% 0.018 50);
+  --card: oklch(26% 0.022 50);
+  --text: oklch(93% 0.012 70);
+  --text-soft: oklch(72% 0.016 60);
+  --text-faint: oklch(52% 0.016 60);
+  --border: oklch(34% 0.02 55);
+
+  --coral: oklch(70% 0.15 35);
+  --coral-dark: oklch(80% 0.12 35);
+  --coral-soft: oklch(28% 0.06 35);
+
+  --sage: oklch(68% 0.08 150);
+  --sage-dark: oklch(78% 0.08 150);
+  --sage-soft: oklch(26% 0.045 150);
+
+  --yellow-soft: oklch(30% 0.05 85);
+  --flame: oklch(72% 0.13 55);
+
+  --shadow: 0 20px 45px -18px oklch(0% 0 0 / 0.5);
+  --shadow-sm: 0 3px 10px -4px oklch(0% 0 0 / 0.35);
+
+  // Not covered by project.mdc's palette (project.mdc only defines coral/sage
+  // as accent families) — extended for the habit color picker, kept dark
+  // enough that the white checkmark/text drawn on top of a solid --yellow /
+  // --violet / --sky fill stays legible, same reasoning as coral/sage below.
+  --yellow: oklch(62% 0.12 85);
+  --yellow-dark: oklch(85% 0.1 85);
+
+  --violet: oklch(58% 0.13 280);
+  --violet-dark: oklch(82% 0.09 280);
+  --violet-soft: oklch(30% 0.05 280);
+
+  --sky: oklch(58% 0.12 200);
+  --sky-dark: oklch(82% 0.09 200);
+  --sky-soft: oklch(30% 0.05 200);
+
+  --heat1: oklch(30% 0.03 35);
+  --heat2: oklch(42% 0.07 35);
+  --heat3: oklch(56% 0.11 35);
+  --heat4: oklch(70% 0.15 35);
+
+  --scrim: oklch(5% 0.02 40 / 0.55);
+}
+
+// Belt-and-suspenders: an OS-level dark preference is honored even in the
+// instant before ThemeService resolves "system" and stamps data-theme.
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include dark-palette;
+  }
+}
+
+:root[data-theme='dark'] {
+  @include dark-palette;
+}

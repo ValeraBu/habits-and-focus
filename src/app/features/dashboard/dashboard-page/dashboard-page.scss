@@ -1,0 +1,20 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page__title {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+:host-context([data-theme='dark']) .page__title {
+  color: white;
+}
+
+.page__subtitle {
+  margin-top: 4px;
+  color: var(--text-soft);
+  font-size: 14.5px;
+}

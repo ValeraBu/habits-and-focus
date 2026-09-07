@@ -1,0 +1,167 @@
+.habit-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 22px;
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.habit-card__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+}
+
+.habit-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.habit-card__name {
+  font-weight: 700;
+  font-size: 15.5px;
+}
+
+:host-context([data-theme='dark']) .habit-card__name {
+  color: white;
+}
+
+.habit-card__progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-track {
+  flex: 1;
+  max-width: 220px;
+  height: 7px;
+  overflow: hidden;
+  background: var(--border);
+  border-radius: var(--radius-round);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-round);
+}
+
+.habit-card__meta {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-soft);
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.progress-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  &:hover {
+    color: var(--coral-dark);
+  }
+}
+
+.progress-input {
+  width: 52px;
+  padding: 2px 6px;
+  border: 1.5px solid var(--coral);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.habit-card__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+.checkbox {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-round);
+  background: transparent;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .progress-fill {
+    transition: width 300ms ease-out;
+  }
+
+  .checkbox {
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .checkbox--checked {
+    animation: checkbox-bounce 200ms ease;
+  }
+
+  @keyframes checkbox-bounce {
+    0% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.18);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-round);
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--coral);
+    color: var(--coral-dark);
+  }
+}

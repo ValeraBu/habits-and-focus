@@ -1,0 +1,182 @@
+---
+description: Habit & Focus Hub — стек, архитектура и конвенции проекта
+globs:
+alwaysApply: true
+---
+
+# Habit & Focus Hub
+
+Учебный pet-проект. Трекер привычек и рутин (чтение, вязание, учёба) с таймером фокуса (Pomodoro) и уютной аналитикой. Личный дневник, а не корпоративный дашборд — держи этот тон в UI и в текстах интерфейса.
+
+## Стек
+
+- Angular (последняя стабильная версия), только standalone-компоненты, без NgModule.
+- TypeScript strict mode.
+- Состояние — Angular Signals (`signal`, `computed`, `effect`). NgRx/NGXS не использовать — для проекта такого размера это избыточно.
+- Стили — SCSS с CSS custom properties для темы (см. "Дизайн-система" ниже).
+- Хранение данных — только `localStorage`, бэкенда и API нет.
+- Роутинг — lazy loading по фичам (`loadComponent` / `loadChildren`).
+
+## Архитектура: feature-based
+
+```
+src/app/
+  core/                     # синглтон-сервисы, общие для всего приложения
+    services/
+      storage.service.ts    # типизированная обёртка над localStorage
+      id-generator.service.ts
+    models/
+      storage-schema.ts     # ключи localStorage, версия схемы
+  shared/                   # переиспользуемое между фичами
+    components/             # checkbox, progress-bar, icon-picker, button...
+    pipes/
+    directives/
+    utils/
+      date.utils.ts
+  features/
+    habit-tracker/
+      components/           # habit-list, habit-card, habit-form
+      services/
+        habit.service.ts    # CRUD + сигналы habits(), todayLogs()
+        streak.util.ts       # чистая функция расчёта streak
+      models/
+        habit.model.ts
+      habit-tracker.routes.ts
+    focus-timer/
+      components/           # timer, session-history
+      services/
+        timer.service.ts
+        sound.service.ts
+      models/
+        focus-session.model.ts
+      focus-timer.routes.ts
+    dashboard/
+      components/           # heatmap, stats-cards, weekly-chart
+      services/
+        analytics.service.ts
+      dashboard.routes.ts
+  app.routes.ts
+  app.config.ts
+```
+
+Правила:
+- Каждая фича самодостаточна: свои компоненты/сервисы/модели, не знает о внутренностях других фич.
+- Общее — только через `core` и `shared`.
+- Никогда не хранить вычисляемые данные (streak, агрегаты за неделю/месяц) в localStorage — считать их чистыми функциями (`streak.util.ts`, `analytics.service.ts`) из массивов `HabitLog` / `FocusSession`, чтобы не было рассинхрона.
+
+## Модели данных
+
+```typescript
+export interface Habit {
+  id: string;
+  name: string;
+  category: 'reading' | 'knitting' | 'study' | 'custom';
+  icon: string;
+  color: string;
+  targetPerDay: number;
+  unit: string;           // «страниц», «рядов», «слов», «минут»
+  createdAt: string;      // ISO date
+  active: boolean;
+}
+
+export interface HabitLog {
+  id: string;
+  habitId: string;
+  date: string;           // ISO date (YYYY-MM-DD)
+  value: number;
+  completed: boolean;
+  createdAt: string;      // ISO datetime
+}
+
+export interface FocusSession {
+  id: string;
+  habitId?: string;
+  durationMinutes: number;
+  startedAt: string;      // ISO datetime
+  completedAt?: string;
+  type: 'focus' | 'break';
+}
+```
+
+`StorageService` — единая типизированная обёртка (`get<T>(key, fallback): T`, `set<T>(key, value): void`) с версией схемы в отдельном ключе — задел на будущие миграции.
+
+## Логирование выполнения привычек
+ 
+У каждой привычки два равноправных способа зафиксировать прогресс за день (см. `design-reference/habit-tracker.html`):
+- Тап по круглому чекбоксу — сразу логирует значение, равное `targetPerDay` (быстрый способ «выполнено как обычно»).
+- Тап по числу рядом с прогресс-баром (иконка карандаша) — открывает инлайн-инпут, куда можно вписать любое фактическое значение, в том числе больше цели (например, прочитано 22 страницы при цели 15). Прогресс-бар визуально не превышает 100%, но в `HabitLog.value` всегда сохраняется реальное введённое число.
+- `completed` в `HabitLog` всегда вычисляется как `value >= habit.targetPerDay` — отдельного флага «перевыполнено» не заводим; при необходимости это выводится сравнением `value` и `targetPerDay`.
+- `habit.service.ts` даёт единый метод `logProgress(habitId, value, date = todayISO())` для обоих сценариев — чекбокс просто вызывает его с `value = habit.targetPerDay`, инлайн-инпут — с введённым числом.
+- Инпут принимает только неотрицательные числа; валидацию (например, разумный верхний предел вроде 1000) делать на уровне компонента, не в сервисе.
+
+## Напоминания о невыполненных привычках
+ 
+Только браузерные уведомления (Notification API) — без бэкенда и push-сервиса напоминание сработает, только пока вкладка с приложением открыта; это ограничение проговорено прямо в UI (см. `design-reference/habit-tracker.html`, попап «Напоминания» из сайдбара).
+ 
+- Настройки — `reminderEnabled: boolean` и `reminderTime: string` (`"HH:mm"`) — хранятся в `localStorage` через `StorageService`, живут в `core/services/notification.service.ts` (сервис общий для всего приложения, не привязан к одной фиче).
+- `notification.service.ts`: при включённом напоминании и `Notification.permission === 'granted'` раз в минуту (`setInterval`, стартует при инициализации сервиса) сравнивает текущее время с `reminderTime`; если совпало и среди сегодняшних привычек есть незавершённые (`habit.service.ts` → `todayLogs()` + список активных привычек), показывает `new Notification(...)` с заголовком и телом вида «Не выполнено N привычек сегодня» (без раскрытия персональных данных в самом тексте, если это не нужно — сервис только считает количество).
+- Разрешение запрашивается по клику на кнопку «Разрешить» в попапе, не автоматически при загрузке приложения — `Notification.requestPermission()`. Три состояния UI: `default` — показываем плашку-CTA с кнопкой «Разрешить»; `granted` — плашка заменяется коротким статусом с галочкой; `denied` — показываем текст с инструкцией разрешить уведомления в настройках браузера (кнопку не показываем повторно, `requestPermission()` не сработает молча при `denied`).
+- Тумблер «Напоминать о невыполненных привычках» и выбор времени доступны независимо от статуса разрешения — пользователь может настроить время заранее, до выдачи разрешения браузером.
+
+## Дизайн-система
+
+Стиль: уютный, мягкий, тёплый — пастельная палитра, скруглённые углы, мягкие тени без резких контрастов, воздушные отступы. Шрифт — Nunito (Google Fonts). Иконки — только inline SVG (stroke-based, 24×24 grid), никаких emoji.
+
+Точный референс лежит в `design-reference/` (чистые HTML-макеты каждого экрана) и `design-reference/screenshots/` (PNG) — перед вёрсткой любого экрана сверяйся с ними по цветам, отступам и структуре, а не придумывай заново.
+
+Токены темы (перенести в глобальные CSS custom properties, например `styles/_theme.scss`):
+
+```css
+--bg: oklch(96% 0.016 75);
+--bg-panel: oklch(93% 0.02 75);
+--card: oklch(99% 0.008 80);
+--text: oklch(30% 0.025 50);
+--text-soft: oklch(52% 0.02 50);
+--text-faint: oklch(68% 0.015 60);
+--border: oklch(89% 0.015 70);
+--coral: oklch(68% 0.14 35);
+--coral-dark: oklch(56% 0.15 32);
+--coral-soft: oklch(93% 0.04 35);
+--sage: oklch(64% 0.07 150);
+--sage-dark: oklch(46% 0.07 150);
+--sage-soft: oklch(92% 0.03 150);
+--yellow-soft: oklch(94% 0.05 85);
+--flame: oklch(45% 0.1 60);
+```
+
+Радиусы: карточки 18–20px, кнопки/пилюли 14px или 999px (полностью круглые), чекбоксы — круглые. Тени — мягкие, тёплого оттенка (`0 3px 10px -4px oklch(35% 0.05 40 / 0.28)`), никаких резких чёрных теней и градиентных фонов.
+
+## Тёмная тема
+ 
+Принцип: тот же тёплый оттенок (hue), что и в светлой теме, просто инвертированная светлота — никакого холодного серого/чёрного. `--card` делаем чуть светлее `--bg`, чтобы карточки визуально приподнимались над фоном (как в светлой теме `--card` чуть светлее `--bg`), а не «висели» на контрастном белом. Токены переопределяются в `[data-theme="dark"]` (и в `@media (prefers-color-scheme: dark)`, если тема не выбрана вручную):
+ 
+```css
+[data-theme="dark"] {
+  --bg: oklch(21% 0.02 50);
+  --bg-panel: oklch(17% 0.018 50);
+  --card: oklch(26% 0.022 50);
+  --text: oklch(93% 0.012 70);
+  --text-soft: oklch(72% 0.016 60);
+  --text-faint: oklch(52% 0.016 60);
+  --border: oklch(34% 0.02 55);
+  --coral: oklch(70% 0.15 35);
+  --coral-dark: oklch(80% 0.12 35);
+  --coral-soft: oklch(28% 0.06 35);
+  --sage: oklch(68% 0.08 150);
+  --sage-dark: oklch(78% 0.08 150);
+  --sage-soft: oklch(26% 0.045 150);
+  --yellow-soft: oklch(30% 0.05 85);
+  --flame: oklch(72% 0.13 55);
+  --shadow: 0 20px 45px -18px oklch(0% 0 0 / 0.5);
+  --shadow-sm: 0 3px 10px -4px oklch(0% 0 0 / 0.35);
+}
+```
+ 
+Важно: `--coral-dark` и `--sage-dark` в тёмной теме используются как светлый текст поверх `--coral-soft`/`--sage-soft` (те же имена переменных, но роль «тёмный акцент для текста на светлой плашке» меняется на «светлый акцент для текста на тёмной плашке») — имена токенов не переименовываем, чтобы компоненты не знали, в какой они теме.
+
+## Конвенции кода
+
+- Имена файлов — kebab-case, один компонент = одна папка (`.ts` / `.html` / `.scss` / `.spec.ts`).
+- Тексты интерфейса — на русском (как в макетах), имена переменных/функций — на английском.
+- Используй сигналы и `computed()` вместо ручной подписки/отписки там, где это уместно.
+- Новый функционал сначала проверяй на соответствие структуре и токенам темы выше — не изобретай новые цвета или отступы вне палитры.

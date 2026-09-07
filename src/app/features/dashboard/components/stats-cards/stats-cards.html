@@ -1,0 +1,25 @@
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-card__icon stat-card__icon--coral">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
+    </div>
+    <div class="stat-card__value">{{ weeklyFocusHours() | number: '1.1-1' }} ч</div>
+    <div class="stat-card__label">Времени за эту неделю</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-card__icon stat-card__icon--sage">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 9.5h17M8 3v3.5M16 3v3.5"/><path d="m8.2 14 1.8 1.8 3.5-3.6"/></svg>
+    </div>
+    <div class="stat-card__value">{{ daysFilledThisWeek() }} из 7</div>
+    <div class="stat-card__label">Дней заполнено</div>
+  </div>
+
+  <div class="stat-card" [class.stat-card--pulse]="isStreakPulsing()">
+    <div class="stat-card__icon stat-card__icon--flame">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+    </div>
+    <div class="stat-card__value">{{ bestStreak() }} {{ bestStreakLabel() }}</div>
+    <div class="stat-card__label">Лучший стрик</div>
+  </div>
+</div>

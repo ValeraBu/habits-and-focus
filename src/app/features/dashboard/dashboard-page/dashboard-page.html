@@ -1,0 +1,16 @@
+<section class="page">
+  <div>
+    <div class="page__title">Статистика</div>
+    <div class="page__subtitle">Ваш прогресс за последние недели</div>
+  </div>
+
+  <app-stats-cards
+    [weeklyFocusHours]="weeklyFocusHours()"
+    [daysFilledThisWeek]="daysFilledThisWeek()"
+    [bestStreak]="bestStreak()"
+  />
+
+  <app-heatmap [cells]="heatmapCells()" />
+
+  <app-weekly-chart [weekdayCounts]="habitsByWeekday()" [activeHabitCount]="activeHabitCount()" />
+</section>

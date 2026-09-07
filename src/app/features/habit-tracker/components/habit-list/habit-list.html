@@ -1,0 +1,50 @@
+<section class="page">
+  <div class="page__header">
+    <div>
+      <div class="page__greeting">{{ greeting }}</div>
+      <div class="page__date">{{ formattedDate }}</div>
+    </div>
+    <button type="button" class="add-button" (click)="openCreateForm()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Добавить привычку
+    </button>
+  </div>
+
+  @if (habits().length === 0) {
+    <div class="empty-state">
+      <div class="empty-state__title">Пока нет ни одной привычки</div>
+      <p class="empty-state__text">Добавьте первую привычку, чтобы начать вести свой дневник.</p>
+    </div>
+  } @else {
+    @let progress = todayProgress();
+    @let percent = progress.total > 0 ? (progress.completed / progress.total) * 100 : 0;
+
+    <div class="summary-card">
+      <div class="summary-card__text">
+        <div class="summary-card__title">
+          Выполнено {{ progress.completed }} из {{ progress.total }} привычек
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" [style.width.%]="percent"></div>
+        </div>
+      </div>
+      <div class="summary-card__percent">{{ percent | number: '1.0-0' }}%</div>
+    </div>
+
+    <div class="habit-list">
+      @for (habit of habits(); track habit.id) {
+        <app-habit-card
+          [habit]="habit"
+          (toggled)="toggleHabit(habit)"
+          (progressLogged)="logProgress(habit, $event)"
+          (editRequested)="openEditForm(habit)"
+          (archiveRequested)="archiveHabit(habit)"
+        />
+      }
+    </div>
+  }
+
+  @if (isFormOpen()) {
+    <app-habit-form [habit]="editingHabit()" (saved)="onFormSave($event)" (closed)="onFormCancel()" />
+  }
+</section>

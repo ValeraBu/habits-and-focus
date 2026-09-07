@@ -1,0 +1,16 @@
+<div class="chart">
+  <div class="chart__title">Привычки по дням недели</div>
+
+  <div class="chart__bars" [style.min-height.px]="maxBarHeightPx">
+    @for (bar of bars(); track bar.day) {
+      <div class="chart__column">
+        <div
+          class="chart__bar"
+          [class.chart__bar--sage]="bar.color === 'sage'"
+          [style.height.px]="bar.heightPx"
+        ></div>
+        <div class="chart__label">{{ bar.day }}</div>
+      </div>
+    }
+  </div>
+</div>

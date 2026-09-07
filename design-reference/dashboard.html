@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Dashboard — Habit and Focus Hub</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+  :root {
+    --bg: oklch(96% 0.016 75);
+    --bg-panel: oklch(93% 0.02 75);
+    --card: oklch(99% 0.008 80);
+    --text: oklch(30% 0.025 50);
+    --text-soft: oklch(52% 0.02 50);
+    --text-faint: oklch(68% 0.015 60);
+    --border: oklch(89% 0.015 70);
+    --coral: oklch(68% 0.14 35);
+    --coral-dark: oklch(56% 0.15 32);
+    --coral-soft: oklch(93% 0.04 35);
+    --sage: oklch(64% 0.07 150);
+    --sage-dark: oklch(46% 0.07 150);
+    --sage-soft: oklch(92% 0.03 150);
+    --yellow-soft: oklch(94% 0.05 85);
+    --flame: oklch(45% 0.1 60);
+    --heat1: oklch(90% 0.045 35);
+    --heat2: oklch(82% 0.09 35);
+    --heat3: oklch(73% 0.12 35);
+    --heat4: oklch(68% 0.14 35);
+    --shadow-sm: 0 3px 10px -4px oklch(35% 0.05 40 / 0.28);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Nunito', system-ui, sans-serif; }
+  a { color: var(--coral-dark); }
+  a:hover { color: var(--coral); }
+</style>
+
+</head>
+<body style="margin:0;background:#f2ece0;display:flex;justify-content:center;padding:24px;">
+
+<div style="width:1440px;height:1040px;background:var(--bg);display:flex;color:var(--text);overflow:hidden;">
+
+  <div style="width:232px;flex-shrink:0;background:var(--bg-panel);padding:32px 18px;display:flex;flex-direction:column;gap:34px;border-right:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:10px;padding:0 10px;">
+      <div style="width:36px;height:36px;border-radius:11px;background:var(--coral);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+      </div>
+      <div style="font-weight:800;font-size:15px;line-height:1.2;">Habit &amp; Focus<br>Hub</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;color:var(--text-soft);font-weight:600;font-size:14.5px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 6 1.4 1.4L7.3 5"/><path d="M10 6h10.5"/><path d="m3.5 12 1.4 1.4 2.4-2.4"/><path d="M10 12h10.5"/><path d="m3.5 18 1.4 1.4 2.4-2.4"/><path d="M10 18h10.5"/></svg>
+        Привычки
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;color:var(--text-soft);font-weight:600;font-size:14.5px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
+        Фокус
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--coral-soft);color:var(--coral-dark);font-weight:700;font-size:14.5px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M11 20V4M18 20v-7"/><path d="M2 20h20"/></svg>
+        Статистика
+      </div>
+    </div>
+  </div>
+
+  <div style="flex:1;padding:44px 56px;display:flex;flex-direction:column;gap:24px;overflow:hidden;">
+
+    <div>
+      <div style="font-size:26px;font-weight:800;">Статистика</div>
+      <div style="font-size:14.5px;color:var(--text-soft);margin-top:4px;">Ваш прогресс за последние недели</div>
+    </div>
+
+    <div style="display:flex;gap:16px;">
+      <div style="flex:1;background:var(--card);border-radius:20px;padding:22px 24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:12px;background:var(--coral-soft);display:flex;align-items:center;justify-content:center;color:var(--coral-dark);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
+        </div>
+        <div style="font-size:30px;font-weight:800;">8.5 ч</div>
+        <div style="font-size:13.5px;color:var(--text-soft);font-weight:600;">Времени за эту неделю</div>
+      </div>
+      <div style="flex:1;background:var(--card);border-radius:20px;padding:22px 24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:12px;background:var(--sage-soft);display:flex;align-items:center;justify-content:center;color:var(--sage-dark);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 9.5h17M8 3v3.5M16 3v3.5"/><path d="m8.2 14 1.8 1.8 3.5-3.6"/></svg>
+        </div>
+        <div style="font-size:30px;font-weight:800;">5 из 7</div>
+        <div style="font-size:13.5px;color:var(--text-soft);font-weight:600;">Дней заполнено</div>
+      </div>
+      <div style="flex:1;background:var(--card);border-radius:20px;padding:22px 24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:12px;background:var(--yellow-soft);display:flex;align-items:center;justify-content:center;color:var(--flame);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+        </div>
+        <div style="font-size:30px;font-weight:800;">21 день</div>
+        <div style="font-size:13.5px;color:var(--text-soft);font-weight:600;">Лучший стрик</div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border-radius:20px;padding:24px 28px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:16px;">
+      <div style="font-weight:700;font-size:15px;">Активность по дням</div>
+      <div style="display:flex;gap:14px;">
+        <div style="display:flex;flex-direction:column;gap:5px;justify-content:space-between;padding:1px 0;">
+          <div style="font-size:10.5px;color:var(--text-faint);height:14px;line-height:14px;">Пн</div>
+          <div style="font-size:10.5px;color:var(--text-faint);height:14px;line-height:14px;"></div>
+          <div style="font-size:10.5px;color:var(--text-faint);height:14px;line-height:14px;">Ср</div>
+          <div style="font-size:10.5px;color:var(--text-faint);height:14px;line-height:14px;"></div>
+          <div style="font-size:10.5px;color:var(--text-faint);height:14px;line-height:14px;">Пт</div>
+          <div style="font-size:10.5px;color:var(--text-faint);height:14px;line-height:14px;"></div>
+          <div style="font-size:10.5px;color:var(--text-faint);height:14px;line-height:14px;">Вс</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(10,14px);grid-template-rows:repeat(7,14px);gap:4px;">
+          <div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat4);"></div>
+          <div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat4);"></div>
+          <div style="border-radius:4px;background:var(--border);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat3);"></div>
+          <div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat4);"></div>
+          <div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--border);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat4);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat3);"></div>
+          <div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--border);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat4);"></div>
+          <div style="border-radius:4px;background:var(--border);"></div><div style="border-radius:4px;background:var(--border);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--border);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat1);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat2);"></div><div style="border-radius:4px;background:var(--heat3);"></div><div style="border-radius:4px;background:var(--heat3);"></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;align-self:flex-end;">
+        <div style="font-size:11px;color:var(--text-faint);margin-right:4px;">меньше</div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--border);"></div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat1);"></div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat2);"></div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat3);"></div>
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--heat4);"></div>
+        <div style="font-size:11px;color:var(--text-faint);margin-left:4px;">больше</div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border-radius:20px;padding:24px 28px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:18px;flex:1;">
+      <div style="font-weight:700;font-size:15px;">Привычки по дням недели</div>
+      <div style="display:flex;align-items:flex-end;gap:22px;flex:1;padding-top:8px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="width:34px;height:96px;border-radius:10px;background:var(--coral);"></div>
+          <div style="font-size:12px;color:var(--text-soft);font-weight:600;">Пн</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="width:34px;height:120px;border-radius:10px;background:var(--coral);"></div>
+          <div style="font-size:12px;color:var(--text-soft);font-weight:600;">Вт</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="width:34px;height:72px;border-radius:10px;background:var(--coral);"></div>
+          <div style="font-size:12px;color:var(--text-soft);font-weight:600;">Ср</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="width:34px;height:120px;border-radius:10px;background:var(--coral);"></div>
+          <div style="font-size:12px;color:var(--text-soft);font-weight:600;">Чт</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="width:34px;height:96px;border-radius:10px;background:var(--coral);"></div>
+          <div style="font-size:12px;color:var(--text-soft);font-weight:600;">Пт</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="width:34px;height:48px;border-radius:10px;background:var(--sage);"></div>
+          <div style="font-size:12px;color:var(--text-soft);font-weight:600;">Сб</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="width:34px;height:72px;border-radius:10px;background:var(--sage);"></div>
+          <div style="font-size:12px;color:var(--text-soft);font-weight:600;">Вс</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

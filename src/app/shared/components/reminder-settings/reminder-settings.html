@@ -1,0 +1,78 @@
+<div class="reminder">
+  <button type="button" class="reminder__trigger" (click)="toggle()" [attr.aria-expanded]="isOpen()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+    <span class="reminder__trigger-text">Напоминания</span>
+  </button>
+
+  @if (isOpen()) {
+    <div class="reminder__panel">
+      <div class="reminder__header">
+        <div class="reminder__title">Напоминания</div>
+        <button type="button" class="reminder__close" (click)="close()" aria-label="Закрыть">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="reminder__row">
+        <div class="reminder__row-label">Напоминать о невыполненных привычках</div>
+        <button
+          type="button"
+          class="switch"
+          [class.switch--on]="notifications.reminderEnabled()"
+          role="switch"
+          [attr.aria-checked]="notifications.reminderEnabled()"
+          (click)="toggleReminderEnabled()"
+        >
+          <span class="switch__knob"></span>
+        </button>
+      </div>
+
+      <div class="reminder__row reminder__row--time">
+        <div class="reminder__row-label reminder__row-label--muted">Время</div>
+        <button
+          type="button"
+          class="time-trigger"
+          [class.time-trigger--open]="isTimePickerOpen()"
+          [attr.aria-expanded]="isTimePickerOpen()"
+          (click)="toggleTimePicker()"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" [attr.stroke]="isTimePickerOpen() ? 'var(--coral)' : 'var(--text-faint)'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+          {{ notifications.reminderTime() }}
+        </button>
+
+        @if (isTimePickerOpen()) {
+          <app-time-picker
+            class="time-picker-popover"
+            [value]="notifications.reminderTime()"
+            (valueChange)="onTimeChange($event)"
+          />
+        }
+      </div>
+
+      @switch (notifications.permissionStatus()) {
+        @case ('default') {
+          <div class="permission-cta">
+            <div class="permission-cta__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="permission-cta__icon"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              <div class="permission-cta__text">Разрешите уведомления браузера, чтобы получать напоминания</div>
+            </div>
+            <button type="button" class="permission-cta__button" (click)="requestPermission()">Разрешить</button>
+          </div>
+        }
+        @case ('granted') {
+          <div class="permission-status permission-status--granted">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4 4L19 7.5"/></svg>
+            Уведомления разрешены
+          </div>
+        }
+        @case ('denied') {
+          <div class="permission-status permission-status--denied">
+            Уведомления заблокированы в настройках браузера — включите их вручную
+          </div>
+        }
+      }
+
+      <div class="reminder__hint">Работает, пока вкладка приложения открыта в браузере</div>
+    </div>
+  }
+</div>

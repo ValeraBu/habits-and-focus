@@ -1,0 +1,27 @@
+<div class="heatmap">
+  <div class="heatmap__title">Активность по дням</div>
+
+  <div class="heatmap__body">
+    <div class="heatmap__labels">
+      @for (label of dayLabels; track $index) {
+        <div class="heatmap__label">{{ label }}</div>
+      }
+    </div>
+
+    <div class="heatmap__scroll">
+      <div class="heatmap__grid">
+        @for (cell of cells(); track cell.date) {
+          <div class="heatmap__cell" [style.background]="colorFor(cell.level)" [title]="titleFor(cell)"></div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="heatmap__legend">
+    <span class="heatmap__legend-label">меньше</span>
+    @for (level of legendLevels; track level) {
+      <div class="heatmap__legend-swatch" [style.background]="colorFor(level)"></div>
+    }
+    <span class="heatmap__legend-label">больше</span>
+  </div>
+</div>

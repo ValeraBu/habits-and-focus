@@ -1,0 +1,98 @@
+<div class="overlay">
+  <button type="button" class="scrim" (click)="onCancel()" aria-label="Закрыть"></button>
+
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal__header">
+      <div class="modal__title">{{ title() }}</div>
+      <button type="button" class="modal__close" (click)="onCancel()" aria-label="Закрыть">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal__form">
+      <div class="field">
+        <label class="field__label" for="habit-name">Название</label>
+        <input
+          id="habit-name"
+          type="text"
+          class="field__input"
+          formControlName="name"
+          placeholder="Прочитать 15 страниц"
+        />
+      </div>
+
+      <div class="field">
+        <div class="field__label">Категория</div>
+        <div class="chips">
+          @for (option of categoryOptions; track option.value) {
+            <button
+              type="button"
+              class="chip"
+              [class.chip--active]="form.controls.category.value === option.value"
+              (click)="selectCategory(option.value)"
+            >
+              @switch (option.value) {
+                @case ('reading') {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H11a1 1 0 0 1 1 1v15a1 1 0 0 0-1-1H5.5A1.5 1.5 0 0 1 4 17.5V5.5Z"/><path d="M20 5.5c0-.83-.67-1.5-1.5-1.5H13a1 1 0 0 0-1 1v15a1 1 0 0 1 1-1h5.5a1.5 1.5 0 0 0 1.5-1.5V5.5Z"/></svg>
+                }
+                @case ('knitting') {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="6"/><path d="M8 10.5c2 1 6 1 8 0M7.5 13.5c2.5 1.5 6.5 1.5 9 0"/><path d="M9 8 6 3M15 8l3-5"/></svg>
+                }
+                @case ('study') {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8l10-4 10 4-10 4-10-4Z"/><path d="M6 10.5v4.5c0 1.2 2.7 3 6 3s6-1.8 6-3v-4.5"/></svg>
+                }
+                @case ('custom') {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg>
+                }
+              }
+              {{ option.label }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field__label">Цвет</div>
+        <div class="swatches">
+          @for (option of colorOptions; track option.value) {
+            <button
+              type="button"
+              class="swatch"
+              [class.swatch--active]="form.controls.color.value === option.value"
+              [style.background]="'var(--' + option.value + ')'"
+              [style.--swatch-color]="'var(--' + option.value + ')'"
+              (click)="selectColor(option.value)"
+              [attr.aria-label]="option.label"
+            ></button>
+          }
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label" for="habit-target">Цель в день</label>
+          <input
+            id="habit-target"
+            type="number"
+            min="1"
+            class="field__input"
+            formControlName="targetPerDay"
+          />
+        </div>
+        <div class="field">
+          <label class="field__label" for="habit-unit">Единица</label>
+          <select id="habit-unit" class="field__input field__select" formControlName="unit">
+            @for (unit of unitOptions; track unit) {
+              <option [value]="unit">{{ unit }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="modal__actions">
+        <button type="button" class="button button--ghost" (click)="onCancel()">Отмена</button>
+        <button type="submit" class="button button--primary">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
