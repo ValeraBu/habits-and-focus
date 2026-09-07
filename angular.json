@@ -10,7 +10,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "habit-focus-hub": {
+    "habits-and-focus": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -63,10 +63,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "habit-focus-hub:build:production"
+              "buildTarget": "habits-and-focus:build:production"
             },
             "development": {
-              "buildTarget": "habit-focus-hub:build:development"
+              "buildTarget": "habits-and-focus:build:development"
             }
           },
           "defaultConfiguration": "development"
